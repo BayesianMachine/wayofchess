@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img" aria-label="Vader">
+  <circle cx="50" cy="50" r="45" fill="#09090b"/>
+  <path d="M17 40 36 14h28l19 26-11 35H28L17 40Z" fill="#050506" stroke="#e24a3a" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M34 44h32l-7 13H41l-7-13Z" fill="#7e1015"/>
+  <path d="M28 34 10 23M72 34l18-11" stroke="#050506" stroke-width="9" stroke-linecap="round"/>
+  <path d="M20 88c5-19 19-30 30-30s25 11 30 30H20Z" fill="#1b1b20"/>
+  <text x="50" y="94" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" font-weight="700" fill="#ff6658">VADER</text>
+</svg>

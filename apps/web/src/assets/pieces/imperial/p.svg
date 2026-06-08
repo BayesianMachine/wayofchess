@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img" aria-label="Imperial trooper">
+  <path d="M22 89c4-17 17-27 28-27s24 10 28 27H22Z" fill="#171717"/>
+  <path d="M31 87c3-12 11-20 19-20s16 8 19 20H31Z" fill="#2c2d32" stroke="#c0392b" stroke-width="3"/>
+  <path d="M29 40 42 21h16l13 19-7 28H36L29 40Z" fill="#f5f5f2" stroke="#c0392b" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M39 43h22l-5 12H44l-5-12Z" fill="#111116"/>
+  <path d="M35 36 22 28M65 36l13-8" stroke="#f5f5f2" stroke-width="6" stroke-linecap="round"/>
+  <path d="M41 77h18" stroke="#c0392b" stroke-width="6" stroke-linecap="round"/>
+</svg>

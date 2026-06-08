@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img" aria-label="Mandalorian foundling">
+  <path d="M23 88c4-17 16-26 27-26s23 9 27 26H23Z" fill="#2d353c"/>
+  <path d="M32 86c3-11 10-18 18-18s15 7 18 18H32Z" fill="#566a61" stroke="#2f8ecf" stroke-width="3"/>
+  <path d="M31 40 43 22h14l12 18-6 27H37L31 40Z" fill="#b8c5d0" stroke="#2f8ecf" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M40 43h20l-4 11H44l-4-11Z" fill="#111820"/>
+  <path d="M37 34 24 26M63 34l13-8" stroke="#7f8a92" stroke-width="5" stroke-linecap="round"/>
+  <path d="M42 77h16" stroke="#c99a2e" stroke-width="6" stroke-linecap="round"/>
+</svg>

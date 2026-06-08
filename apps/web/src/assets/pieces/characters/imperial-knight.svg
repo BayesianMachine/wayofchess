@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img" aria-label="Scout trooper">
+  <circle cx="50" cy="50" r="45" fill="#111114"/>
+  <path d="M24 39c9-20 39-22 52-1l-9 35H32L24 39Z" fill="#34363d" stroke="#e24a3a" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M38 43h25l-6 13H43l-5-13Z" fill="#08080a"/>
+  <path d="M63 32 88 25 74 49" fill="#34363d" stroke="#e24a3a" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M20 88c5-18 19-29 30-29s25 11 30 29H20Z" fill="#25262c"/>
+  <text x="50" y="94" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#ff6658">SCOUT</text>
+</svg>

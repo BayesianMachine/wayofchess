@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img" aria-label="Dark armored commander">
+  <path d="M16 89c5-19 19-29 34-29s29 10 34 29H16Z" fill="#101012"/>
+  <path d="M25 87c4-13 14-21 25-21s21 8 25 21H25Z" fill="#24252a" stroke="#c0392b" stroke-width="3"/>
+  <path d="M18 38 36 15h28l18 23-10 31H28L18 38Z" fill="#060609" stroke="#c0392b" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M34 40h32l-7 13H41l-7-13Z" fill="#6f0c10"/>
+  <path d="M26 34 9 23M74 34l17-11" stroke="#09090b" stroke-width="8" stroke-linecap="round"/>
+  <path d="M40 76h20" stroke="#c0392b" stroke-width="6" stroke-linecap="round"/>
+</svg>

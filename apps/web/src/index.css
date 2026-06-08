@@ -1,0 +1,67 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html, body, #root {
+    height: 100%;
+    background-color: #080C14;
+    color: #e2e8f0;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      radial-gradient(1px 1px at 4% 12%, rgba(255,255,255,0.55), transparent),
+      radial-gradient(1px 1px at 11% 38%, rgba(255,255,255,0.72), transparent),
+      radial-gradient(1px 1px at 18% 67%, rgba(255,255,255,0.6), transparent),
+      radial-gradient(1px 1px at 22% 8%, rgba(255,255,255,0.85), transparent),
+      radial-gradient(1px 1px at 28% 91%, rgba(255,255,255,0.5), transparent),
+      radial-gradient(1px 1px at 33% 44%, rgba(255,255,255,0.7), transparent),
+      radial-gradient(1px 1px at 39% 22%, rgba(255,255,255,0.65), transparent),
+      radial-gradient(1px 1px at 44% 58%, rgba(255,255,255,0.8), transparent),
+      radial-gradient(1px 1px at 51% 76%, rgba(255,255,255,0.55), transparent),
+      radial-gradient(1px 1px at 56% 15%, rgba(255,255,255,0.9), transparent),
+      radial-gradient(1px 1px at 61% 33%, rgba(255,255,255,0.6), transparent),
+      radial-gradient(1px 1px at 67% 49%, rgba(255,255,255,0.75), transparent),
+      radial-gradient(1px 1px at 72% 84%, rgba(255,255,255,0.52), transparent),
+      radial-gradient(1px 1px at 76% 6%, rgba(255,255,255,0.68), transparent),
+      radial-gradient(1px 1px at 81% 27%, rgba(255,255,255,0.82), transparent),
+      radial-gradient(1px 1px at 86% 61%, rgba(255,255,255,0.58), transparent),
+      radial-gradient(1px 1px at 91% 41%, rgba(255,255,255,0.73), transparent),
+      radial-gradient(1px 1px at 7% 53%, rgba(255,255,255,0.64), transparent),
+      radial-gradient(1px 1px at 14% 79%, rgba(255,255,255,0.77), transparent),
+      radial-gradient(1px 1px at 48% 5%, rgba(255,255,255,0.56), transparent),
+      radial-gradient(1px 1px at 63% 95%, rgba(255,255,255,0.69), transparent),
+      radial-gradient(1px 1px at 79% 18%, rgba(255,255,255,0.61), transparent),
+      radial-gradient(1px 1px at 94% 72%, rgba(255,255,255,0.84), transparent),
+      radial-gradient(1px 1px at 36% 88%, rgba(255,255,255,0.53), transparent),
+      radial-gradient(1px 1px at 53% 36%, rgba(255,255,255,0.71), transparent);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      radial-gradient(2px 2px at 12% 25%, rgba(255,255,255,0.85), transparent),
+      radial-gradient(2px 2px at 27% 62%, rgba(255,255,255,0.75), transparent),
+      radial-gradient(2px 2px at 41% 14%, rgba(255,255,255,0.95), transparent),
+      radial-gradient(2px 2px at 58% 78%, rgba(255,255,255,0.7), transparent),
+      radial-gradient(2px 2px at 69% 38%, rgba(255,255,255,0.9), transparent),
+      radial-gradient(2px 2px at 83% 55%, rgba(255,255,255,0.8), transparent),
+      radial-gradient(2px 2px at 8% 82%, rgba(255,255,255,0.72), transparent),
+      radial-gradient(2px 2px at 92% 12%, rgba(255,255,255,1), transparent);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  #root {
+    position: relative;
+    z-index: 1;
+  }
+}

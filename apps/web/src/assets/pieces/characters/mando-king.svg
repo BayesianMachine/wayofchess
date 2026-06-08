@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img" aria-label="Din Djarin">
+  <circle cx="50" cy="50" r="45" fill="#0f1720"/>
+  <path d="M22 39 37 13h26l15 26-9 36H31L22 39Z" fill="#c8d2da" stroke="#2f8ecf" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M34 43h32l-7 15H41l-7-15Z" fill="#080d13"/>
+  <path d="M48 20h4v54h-4Z" fill="#4d5964"/>
+  <text x="50" y="94" text-anchor="middle" font-family="Arial, sans-serif" font-size="13" font-weight="700" fill="#f4c14d">DIN</text>
+</svg>

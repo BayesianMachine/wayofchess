@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img" aria-label="Mandalorian heavy warrior">
+  <path d="M16 89c5-18 19-28 34-28s29 10 34 28H16Z" fill="#24303a"/>
+  <path d="M23 87c4-13 14-20 27-20s23 7 27 20H23Z" fill="#6f7880" stroke="#2f8ecf" stroke-width="3"/>
+  <path d="M24 34 38 14h24l14 20-8 33H32L24 34Z" fill="#95a0a8" stroke="#2f8ecf" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M36 39h28l-6 14H42l-6-14Z" fill="#101820"/>
+  <path d="M14 54h72" stroke="#424a52" stroke-width="9" stroke-linecap="round"/>
+  <path d="M13 45h18l3 24H17l-4-24ZM69 45h18l-4 24H66l3-24Z" fill="#7e8992" stroke="#2f8ecf" stroke-width="3"/>
+  <path d="M41 77h18" stroke="#c99a2e" stroke-width="6" stroke-linecap="round"/>
+</svg>

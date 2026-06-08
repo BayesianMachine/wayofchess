@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img" aria-label="Stormtrooper">
+  <circle cx="50" cy="50" r="45" fill="#101114"/>
+  <path d="M24 39 38 17h24l14 22-9 34H33L24 39Z" fill="#f5f5f0" stroke="#e24a3a" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M37 43h26l-6 13H43l-6-13Z" fill="#111"/>
+  <path d="M30 33 14 24M70 33l16-9" stroke="#f5f5f0" stroke-width="8" stroke-linecap="round"/>
+  <path d="M21 88c5-18 19-28 29-28s24 10 29 28H21Z" fill="#303238"/>
+  <text x="50" y="94" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" font-weight="700" fill="#ff6658">TROOPER</text>
+</svg>

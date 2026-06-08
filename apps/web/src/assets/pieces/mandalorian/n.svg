@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img" aria-label="Mandalorian scout">
+  <path d="M18 89c5-18 18-27 32-27s27 9 32 27H18Z" fill="#303841"/>
+  <path d="M28 87c3-12 12-19 22-19s19 7 22 19H28Z" fill="#536b5d" stroke="#2f8ecf" stroke-width="3"/>
+  <path d="M25 37c8-18 37-23 50-1l-8 31H33L25 37Z" fill="#879198" stroke="#2f8ecf" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M39 40h24l-5 13H44l-5-13Z" fill="#111820"/>
+  <path d="M65 30 87 23 74 45" fill="#879198" stroke="#2f8ecf" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M41 77h18" stroke="#c99a2e" stroke-width="6" stroke-linecap="round"/>
+</svg>

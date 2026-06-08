@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img" aria-label="Imperial heavy trooper">
+  <path d="M15 89c5-18 20-28 35-28s30 10 35 28H15Z" fill="#111"/>
+  <path d="M24 87c4-13 14-21 26-21s22 8 26 21H24Z" fill="#2f3035" stroke="#c0392b" stroke-width="3"/>
+  <path d="M23 34 37 14h26l14 20-8 34H31L23 34Z" fill="#202126" stroke="#c0392b" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M37 40h26l-5 12H42l-5-12Z" fill="#0c0c0f"/>
+  <path d="M13 54h74" stroke="#0d0d0f" stroke-width="10" stroke-linecap="round"/>
+  <path d="M14 45h19l3 24H18l-4-24ZM67 45h19l-4 24H64l3-24Z" fill="#303137" stroke="#c0392b" stroke-width="3"/>
+  <path d="M40 76h20" stroke="#c0392b" stroke-width="6" stroke-linecap="round"/>
+</svg>

@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img" aria-label="Mandalorian ally with child">
+  <path d="M18 88c5-17 18-26 34-26s27 9 32 26H18Z" fill="#263442"/>
+  <path d="M27 87c3-11 12-18 25-18s21 7 24 18H27Z" fill="#1f5f88" stroke="#d6a83f" stroke-width="3"/>
+  <path d="M28 35 40 17h24l12 18-7 31H35L28 35Z" fill="#87939d" stroke="#d6a83f" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M39 40h26l-5 13H44l-5-13Z" fill="#10151b"/>
+  <circle cx="69" cy="35" r="14" fill="#8dbb70" stroke="#d6a83f" stroke-width="3"/>
+  <path d="M57 34 43 28M81 34l14-6" stroke="#8dbb70" stroke-width="7" stroke-linecap="round"/>
+  <circle cx="64" cy="33" r="2.5" fill="#111"/>
+  <circle cx="74" cy="33" r="2.5" fill="#111"/>
+  <path d="M42 77h20" stroke="#d6a83f" stroke-width="6" stroke-linecap="round"/>
+</svg>

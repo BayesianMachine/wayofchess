@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img" aria-label="Imperial white-armored officer">
+  <path d="M18 89c5-17 18-28 32-28s27 11 32 28H18Z" fill="#151515"/>
+  <path d="M27 87c3-13 12-21 23-21s20 8 23 21H27Z" fill="#2d2e33" stroke="#c0392b" stroke-width="3"/>
+  <path d="M25 37 38 17h24l13 20-8 31H33L25 37Z" fill="#f4f4f2" stroke="#c0392b" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M38 41h24l-5 12H43l-5-12Z" fill="#101014"/>
+  <path d="M32 32 16 23M68 32l16-9" stroke="#f4f4f2" stroke-width="7" stroke-linecap="round"/>
+  <path d="M40 76h20" stroke="#c0392b" stroke-width="6" stroke-linecap="round"/>
+</svg>

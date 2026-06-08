@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img" aria-label="The Armorer">
+  <circle cx="50" cy="50" r="45" fill="#25160f"/>
+  <path d="M26 38 38 15h24l12 23-8 34H34L26 38Z" fill="#b16f3d" stroke="#f4c14d" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M39 42h22l-5 13H44l-5-13Z" fill="#140b08"/>
+  <path d="M39 18 28 6M61 18 72 6" stroke="#f4c14d" stroke-width="7" stroke-linecap="round"/>
+  <path d="M22 88c5-18 18-28 28-28s23 10 28 28H22Z" fill="#6b3e2c"/>
+  <text x="50" y="94" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" font-weight="700" fill="#f4c14d">ARMORER</text>
+</svg>
