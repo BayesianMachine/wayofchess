@@ -8,9 +8,9 @@ import { GamePage } from './pages/GamePage'
 
 /** Navigate to the local setup page, click Start Game, and wait for the board. */
 async function startLocalGame(page: import('@playwright/test').Page) {
-  await page.goto('/play/local')
+  await page.goto('/')
   await page.getByRole('button', { name: 'Start Game' }).click()
-  await expect(page).toHaveURL(/\/play\/local\/game/, { timeout: 5_000 })
+  await expect(page).toHaveURL(/\/game$/, { timeout: 5_000 })
   const board = new BoardPage(page)
   await board.waitForBoardReady()
   return board
@@ -22,21 +22,30 @@ async function startLocalGame(page: import('@playwright/test').Page) {
 
 test.describe('Local game — setup page', () => {
   test('shows Pass & Play heading and Start Game button', async ({ page }) => {
-    await page.goto('/play/local')
+    await page.goto('/')
     await expect(page.getByRole('heading', { name: /pass.*play/i })).toBeVisible()
     await expect(page.getByRole('button', { name: 'Start Game' })).toBeVisible()
   })
 
   test('shows time control options', async ({ page }) => {
-    await page.goto('/play/local')
+    await page.goto('/')
     // At least one time control pill should be present (e.g. "No Clock")
     await expect(page.getByRole('button', { name: 'No Clock' })).toBeVisible()
   })
 
   test('clicking Start Game navigates to game page', async ({ page }) => {
-    await page.goto('/play/local')
+    await page.goto('/')
     await page.getByRole('button', { name: 'Start Game' }).click()
-    await expect(page).toHaveURL(/\/play\/local\/game/)
+    await expect(page).toHaveURL(/\/game$/)
+  })
+
+  test('timed game starts with running clocks', async ({ page }) => {
+    await page.goto('/')
+    await page.getByRole('button', { name: 'Bullet 1+0' }).click()
+    await page.getByRole('button', { name: 'Start Game' }).click()
+
+    await expect(page).toHaveURL(/\/game$/)
+    await expect(page.locator('.font-mono').filter({ hasText: /0:5\d|1:00/ }).first()).toBeVisible()
   })
 })
 
@@ -45,9 +54,29 @@ test.describe('Local game — setup page', () => {
 // ---------------------------------------------------------------------------
 
 test.describe('Local game — board', () => {
+  test('direct game URL survives a browser refresh', async ({ page }) => {
+    await page.goto('/game')
+    const board = new BoardPage(page)
+    await board.waitForBoardReady()
+
+    await page.reload()
+    await board.waitForBoardReady()
+    await board.expectBoardVisible()
+  })
+
   test('chess board is visible after starting', async ({ page }) => {
     const board = await startLocalGame(page)
     await board.expectBoardVisible()
+  })
+
+  test('uses Mandalorian and Imperial character pieces', async ({ page }) => {
+    await startLocalGame(page)
+
+    await expect(page.locator('img')).toHaveCount(32)
+    await expect(page.getByText('DIN', { exact: true })).toBeVisible()
+    await expect(page.getByText('GROGU', { exact: true })).toBeVisible()
+    await expect(page.getByText('VADER', { exact: true })).toBeVisible()
+    await expect(page.getByText('GIDEON', { exact: true })).toBeVisible()
   })
 
   test('shows White and Black player panels', async ({ page }) => {
@@ -210,7 +239,7 @@ test.describe('Local game — game over overlay', () => {
     await game.waitForGameOver()
 
     await page.getByRole('button', { name: /new game/i }).click()
-    await expect(page).toHaveURL(/\/play\/local/)
+    await expect(page).toHaveURL(/\/$/)
   })
 
   test('game over overlay has "Home" button', async ({ page }) => {
@@ -221,5 +250,17 @@ test.describe('Local game — game over overlay', () => {
     await game.waitForGameOver()
 
     await expect(page.getByRole('button', { name: /home/i })).toBeVisible()
+  })
+
+  test('Home returns to local setup', async ({ page }) => {
+    await startLocalGame(page)
+    const game = new GamePage(page)
+
+    await game.clickResign('black')
+    await game.waitForGameOver()
+    await page.getByRole('button', { name: /home/i }).click()
+
+    await expect(page).toHaveURL(/\/$/)
+    await expect(page.getByRole('heading', { name: /pass.*play/i })).toBeVisible()
   })
 })

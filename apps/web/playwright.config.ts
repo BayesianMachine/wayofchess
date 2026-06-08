@@ -15,14 +15,13 @@ export default defineConfig({
   projects: [
     { name: 'chromium', use: { ...devices['Desktop Chrome'] } },
     {
-      // Smoke tests on mobile viewport — only run home, navigation, auth
-      name: 'mobile',
-      use: { ...devices['iPhone 14'] },
-      testMatch: [
-        '**/home.spec.ts',
-        '**/navigation.spec.ts',
-        '**/auth.spec.ts',
-      ],
+      name: 'tablet-landscape',
+      use: {
+        ...devices['Desktop Chrome'],
+        viewport: { width: 1280, height: 800 },
+        hasTouch: true,
+      },
+      testMatch: ['**/local-game.spec.ts', '**/navigation.spec.ts'],
     },
   ],
   webServer: {

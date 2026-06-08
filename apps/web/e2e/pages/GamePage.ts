@@ -2,7 +2,7 @@ import type { Page } from '@playwright/test'
 import { expect } from '@playwright/test'
 
 /**
- * Page Object for in-game actions shared by local, AI, and online game pages.
+ * Page Object for local in-game actions.
  */
 export class GamePage {
   constructor(private readonly page: Page) {}
@@ -12,17 +12,11 @@ export class GamePage {
   // ---------------------------------------------------------------------------
 
   /**
-   * Click the resign button.
-   * - Local game: side-specific buttons "Resign White" / "Resign Black"
-   * - AI / online game: single "Resign" button
+   * Click the side-specific local resign button.
    */
-  async clickResign(side?: 'white' | 'black') {
-    if (side) {
-      const label = side === 'white' ? 'Resign White' : 'Resign Black'
-      await this.page.getByRole('button', { name: label }).click()
-    } else {
-      await this.page.getByRole('button', { name: 'Resign' }).click()
-    }
+  async clickResign(side: 'white' | 'black') {
+    const label = side === 'white' ? 'Resign White' : 'Resign Black'
+    await this.page.getByRole('button', { name: label }).click()
   }
 
   // ---------------------------------------------------------------------------
@@ -34,23 +28,14 @@ export class GamePage {
     await this.page.getByRole('button', { name: 'Offer Draw' }).click()
   }
 
-  /**
-   * Accept an incoming draw offer.
-   * In the local game the Accept button is inside the Draw Offer modal.
-   * In the online game the Accept button is in the banner at the top.
-   */
+  /** Accept the local draw offer. */
   async acceptDraw() {
     await this.page.getByRole('button', { name: 'Accept' }).click()
   }
 
-  /** Decline a draw offer (local game modal or online game banner). */
+  /** Decline the local draw offer. */
   async declineDraw() {
     await this.page.getByRole('button', { name: 'Decline' }).click()
-  }
-
-  /** Send draw offer from the modal (online game: "Send Offer"). */
-  async sendDrawOffer() {
-    await this.page.getByRole('button', { name: 'Send Offer' }).click()
   }
 
   // ---------------------------------------------------------------------------
@@ -102,8 +87,8 @@ export class GamePage {
     ).toContainText(san, { timeout })
   }
 
-  async expectResignButtonVisible(side?: 'white' | 'black') {
-    const name = side ? (side === 'white' ? 'Resign White' : 'Resign Black') : 'Resign'
+  async expectResignButtonVisible(side: 'white' | 'black') {
+    const name = side === 'white' ? 'Resign White' : 'Resign Black'
     await expect(this.page.getByRole('button', { name })).toBeVisible()
   }
 
