@@ -12,8 +12,6 @@ import type {
   Square,
 } from './types.js'
 
-const STARTING_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'
-
 type VerboseMove = Move
 
 function parseFenFields(fen: string): { halfMoveClock: number; fullMoveNumber: number; enPassant: string } {

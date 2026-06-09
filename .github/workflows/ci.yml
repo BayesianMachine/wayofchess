@@ -20,7 +20,7 @@ jobs:
           node-version: '20'
           cache: 'pnpm'
       - run: pnpm install --frozen-lockfile
-      - run: pnpm turbo typecheck
+      - run: pnpm typecheck
 
   lint:
     name: Lint
@@ -35,26 +35,7 @@ jobs:
           node-version: '20'
           cache: 'pnpm'
       - run: pnpm install --frozen-lockfile
-      - run: pnpm turbo lint
-
-  test-api:
-    name: API Unit Tests
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v3
-        with:
-          version: 9
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-          cache: 'pnpm'
-      - run: pnpm install --frozen-lockfile
-      - run: pnpm --filter @mandalorian-chess/api exec vitest run
-        env:
-          DATABASE_URL: postgresql://test:test@localhost:5432/test
-          REDIS_URL: redis://localhost:6379
-          JWT_SECRET: ci-test-secret
+      - run: pnpm lint
 
   test-engine:
     name: Chess Engine Tests
@@ -85,7 +66,7 @@ jobs:
           node-version: '20'
           cache: 'pnpm'
       - run: pnpm install --frozen-lockfile
-      - run: pnpm turbo build
+      - run: pnpm build
 
   e2e:
     name: E2E Tests
@@ -103,6 +84,6 @@ jobs:
           cache: 'pnpm'
       - run: pnpm install --frozen-lockfile
       - run: pnpm --filter @mandalorian-chess/web exec playwright install --with-deps chromium
-      - run: pnpm --filter @mandalorian-chess/web test:e2e
+      - run: pnpm test:e2e
         env:
           CI: true

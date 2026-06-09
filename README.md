@@ -1,108 +1,73 @@
 # Mandalorian Chess
 
-A Mandalorian-themed chess game with local play, AI opponents, and real-time online multiplayer.
+A landscape-first, local pass-and-play chess game with Mandalorian and Imperial
+character pieces. The current product runs entirely in the browser and requires
+no account, API, database, Docker, or network service.
 
 ## Features
 
-- ♟ Full chess rules (FIDE-compliant) via chess.js
-- ⚔ Two factions: Mandalorian Covert vs. Imperial Remnant
-- 🤖 AI opponents (4 difficulty levels)
-- 🌐 Real-time online multiplayer with ELO ratings
-- 📺 Live spectating
-- 🎭 Narrative commentary system
-- 📱 Responsive design with mobile support
+- Full chess rules through the shared chess engine
+- Two-player pass-and-play on one device
+- Mandalorian and Imperial character artwork
+- Time controls, clocks, move history, draw, resignation, and game-over flows
+- Tap-to-select and tap-to-move controls for landscape tablets
+- Local game recovery using browser storage
 
-## Tech Stack
+## Prerequisites
 
-| Layer | Technology |
-|-------|-----------|
-| Frontend | React 18, TypeScript, Vite, TailwindCSS, Framer Motion |
-| State | Zustand |
-| Backend | Node.js 20, Fastify, Socket.IO |
-| Database | PostgreSQL (Prisma ORM) |
-| Cache / Pub-Sub | Redis (ioredis) |
-| Monorepo | pnpm workspaces + Turborepo |
+- Node.js 20 or newer
+- pnpm 9
 
-## Quick Start
-
-### Prerequisites
-
-- Node.js 20+
-- pnpm 9+
-- PostgreSQL 15+
-- Redis 7+
-
-### Development
+## Development
 
 ```bash
-# Install dependencies
 pnpm install
-
-# Set up environment variables
-cp apps/api/.env.example apps/api/.env
-# Edit apps/api/.env with your database/redis credentials
-
-# Run database migrations
-cd apps/api && npx prisma migrate dev && cd ../..
-
-# Start the frontend only (local and AI play)
 pnpm dev
 ```
 
-The web app runs at http://127.0.0.1:5173. A second Vite instance will fail
-instead of selecting another listener.
+The app runs at <http://127.0.0.1:5173>. Vite uses a strict port, so starting a
+second copy fails clearly instead of creating a duplicate listener.
 
-For accounts, matchmaking, online games, ratings, and spectating, start
-PostgreSQL and Redis, then run the complete development stack:
+Docker, PostgreSQL, Redis, environment files, and backend services are not
+required.
 
-```bash
-pnpm dev:full
+To stop an existing Windows development process, identify the listener and stop
+its owning process:
+
+```powershell
+Get-NetTCPConnection -LocalPort 5173 -State Listen
+Stop-Process -Id <OwningProcess>
 ```
-
-The API runs at http://localhost:3001 when the full stack is configured.
-
-### Using Docker Compose
-
-```bash
-docker compose up
-```
-
-Access the app at http://localhost:5173.
 
 ## Project Structure
 
-```
-mandalorian-chess/
-├── apps/
-│   ├── web/          # React frontend (Vite)
-│   └── api/          # Fastify backend
-├── packages/
-│   ├── chess-engine/ # Chess.js wrapper + analysis
-│   └── shared-types/ # Zod schemas + TypeScript types
-├── load-tests/       # k6 load tests
-└── docs/             # Design and architecture docs
+```text
+apps/
+  web/                  React, TypeScript, Vite, and Playwright
+packages/
+  chess-engine/         Framework-independent chess rules
+docs/
+  local-only-design/    Architecture and implementation checkpoints
 ```
 
-## Scripts
+## Commands
 
-| Command | Description |
-|---------|-------------|
-| `pnpm dev` | Start the frontend only |
-| `pnpm dev:web` | Start the frontend only |
-| `pnpm dev:full` | Start the frontend and API development processes |
-| `pnpm build` | Build all packages |
-| `pnpm typecheck` | Type-check all packages |
-| `pnpm test` | Run all unit tests |
-| `pnpm --filter @mandalorian-chess/web test:e2e` | Run Playwright E2E tests |
+| Command | Purpose |
+| --- | --- |
+| `pnpm dev` | Start one local Vite frontend |
+| `pnpm lint` | Lint retained workspace source |
+| `pnpm typecheck` | Type-check the web app and chess engine |
+| `pnpm test` | Run workspace unit tests |
+| `pnpm test:e2e` | Run local-game browser tests |
+| `pnpm build` | Build the chess engine and production web app |
 
-## Deployment
+Production web output is written to `apps/web/dist`.
 
-See [DEPLOYMENT.md](./DEPLOYMENT.md) for full deployment instructions.
+## Documentation
 
-## Troubleshooting Memory
-
-Use [UI_TROUBLESHOOTING.md](./UI_TROUBLESHOOTING.md) for the evidence-first UI
-debugging protocol and append-only incident memory.
+- [Local-only architecture](./docs/local-only-design/ARCHITECTURE_PLAN.md)
+- [Implementation checkpoints](./docs/local-only-design/README.md)
+- [UI troubleshooting memory](./UI_TROUBLESHOOTING.md)
 
 ## License
 
