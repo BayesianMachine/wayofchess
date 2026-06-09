@@ -4,6 +4,8 @@ A landscape-first, local pass-and-play chess game with Mandalorian and Imperial
 character pieces. The current product runs entirely in the browser and requires
 no account, API, database, Docker, or network service.
 
+**Installable app:** <https://bayesianmachine.github.io/wayofchess/>
+
 ## Features
 
 - Full chess rules through the shared chess engine
@@ -12,6 +14,8 @@ no account, API, database, Docker, or network service.
 - Time controls, clocks, move history, draw, resignation, and game-over flows
 - Tap-to-select and tap-to-move controls for landscape tablets
 - Local game recovery using browser storage
+- Installable Android Chrome PWA with complete offline gameplay
+- Versioned history backup/import and update-safe IndexedDB persistence
 
 ## Prerequisites
 
@@ -59,9 +63,26 @@ docs/
 | `pnpm typecheck` | Type-check the web app and chess engine |
 | `pnpm test` | Run workspace unit tests |
 | `pnpm test:e2e` | Run local-game browser tests |
+| `pnpm test:pwa` | Test offline installation and two-release updates |
 | `pnpm build` | Build the chess engine and production web app |
+| `pnpm verify:offline` | Verify manifest, precache, assets, and network independence |
 
 Production web output is written to `apps/web/dist`.
+
+## Android Installation
+
+1. Open <https://bayesianmachine.github.io/wayofchess/> in Google Chrome while online.
+2. Wait for **Ready for offline play**.
+3. Open Chrome's menu and choose **Add to Home screen** or **Install app**.
+4. Launch **The Way of Chess** from the home screen in landscape orientation.
+5. Airplane mode may be enabled after the offline-ready confirmation.
+
+Updates download only while online. If an update is found during a game, it
+waits until that game finishes. Export a backup from **Backup & Data** before a
+device reset or browser-data cleanup.
+
+See [Android PWA guide](./docs/ANDROID_PWA_GUIDE.md) for installation, updates,
+backup, restore, and troubleshooting.
 
 ## Documentation
 

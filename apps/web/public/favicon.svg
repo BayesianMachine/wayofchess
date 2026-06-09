@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="The Way of Chess">
+  <rect width="512" height="512" fill="#080c14"/>
+  <circle cx="256" cy="256" r="210" fill="#0f1720" stroke="#c99a2e" stroke-width="18"/>
+  <path d="M116 204 188 76h136l72 128-46 194H162l-46-194Z" fill="#c8d2da" stroke="#2f8ecf" stroke-width="22" stroke-linejoin="round"/>
+  <path d="M171 222h170l-39 78h-92l-39-78Z" fill="#080d13"/>
+  <path d="M244 104h24v281h-24Z" fill="#4d5964"/>
+  <path d="M176 364h160" stroke="#c99a2e" stroke-width="26" stroke-linecap="round"/>
+</svg>

@@ -8,6 +8,9 @@
     "build": "turbo run build",
     "test": "turbo run test",
     "test:e2e": "pnpm --filter @mandalorian-chess/web test:e2e",
+    "test:pwa": "pnpm --filter @mandalorian-chess/web test:pwa",
+    "verify:offline": "node tools/verify-offline-build.mjs",
+    "icons": "pnpm --filter @mandalorian-chess/web icons",
     "lint": "turbo run lint",
     "typecheck": "turbo run typecheck",
     "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\""

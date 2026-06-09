@@ -19,6 +19,10 @@ function enqueueWrite<T>(operation: () => Promise<T>): Promise<T> {
   return result
 }
 
+export async function flushPersistenceQueue(): Promise<void> {
+  await writeQueue
+}
+
 export async function loadActiveGame(): Promise<GameRecord | null> {
   const database = await getDatabase()
   const entry = await database.get('activeGame', SINGLETON_KEY)

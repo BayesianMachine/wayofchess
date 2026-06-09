@@ -67,6 +67,7 @@ jobs:
           cache: 'pnpm'
       - run: pnpm install --frozen-lockfile
       - run: pnpm build
+      - run: pnpm verify:offline
 
   e2e:
     name: E2E Tests
@@ -85,5 +86,25 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm --filter @mandalorian-chess/web exec playwright install --with-deps chromium
       - run: pnpm test:e2e
+        env:
+          CI: true
+
+  pwa:
+    name: Offline PWA Tests
+    runs-on: ubuntu-latest
+    needs: [build]
+    if: github.event_name == 'pull_request'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v3
+        with:
+          version: 9
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm --filter @mandalorian-chess/web exec playwright install --with-deps chromium
+      - run: pnpm test:pwa
         env:
           CI: true

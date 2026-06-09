@@ -1,5 +1,6 @@
 import { ErrorBoundary, ToastProvider } from '@/shared/ui'
 import AppRoutes from './routes'
+import PwaStatus from './PwaStatus'
 
 export default function App() {
   return (
@@ -8,6 +9,7 @@ export default function App() {
         <main className="min-h-screen">
           <AppRoutes />
         </main>
+        <PwaStatus />
       </ToastProvider>
     </ErrorBoundary>
   )
