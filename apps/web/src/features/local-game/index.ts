@@ -1,5 +1,8 @@
 export { default as LocalGamePage } from './pages/LocalGamePage'
 export { default as LocalSetupPage } from './pages/LocalSetupPage'
+export { default as HistoryPage } from './pages/HistoryPage'
+export { default as HistoryDetailPage } from './pages/HistoryDetailPage'
+export { default as DataManagementPage } from './pages/DataManagementPage'
 export type { LocalSetupConfig } from './types'
 export { useLocalGameStore } from './state/localGameStore'
 export { useClockStore } from './state/clockStore'

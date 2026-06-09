@@ -1,7 +1,15 @@
 import { create } from 'zustand'
 import type { Color } from '@/shared/types'
 
-interface ClockStore {
+export interface ClockSnapshot {
+  whiteMs: number
+  blackMs: number
+  incrementMs: number
+  activeColor: Color | null
+  isRunning: boolean
+}
+
+interface ClockStore extends ClockSnapshot {
   whiteMs: number
   blackMs: number
   incrementMs: number
@@ -14,6 +22,9 @@ interface ClockStore {
   stop: () => void
   addIncrement: (color: Color) => void
   setClocks: (whiteMs: number, blackMs: number) => void
+  restore: (snapshot: ClockSnapshot, startInterval?: boolean) => void
+  snapshot: () => ClockSnapshot
+  suspend: () => void
   flagCheck: () => Color | null
   reset: () => void
 }
@@ -88,6 +99,26 @@ export const useClockStore = create<ClockStore>((set, get) => ({
 
   setClocks: (whiteMs, blackMs) => {
     set({ whiteMs, blackMs })
+  },
+
+  restore: (snapshot, startInterval = false) => {
+    const { _intervalId } = get()
+    if (_intervalId) clearInterval(_intervalId)
+    set({ ...snapshot, _intervalId: null })
+    if (startInterval && snapshot.isRunning && snapshot.activeColor) {
+      get().startFor(snapshot.activeColor)
+    }
+  },
+
+  snapshot: () => {
+    const { whiteMs, blackMs, incrementMs, activeColor, isRunning } = get()
+    return { whiteMs, blackMs, incrementMs, activeColor, isRunning }
+  },
+
+  suspend: () => {
+    const { _intervalId } = get()
+    if (_intervalId) clearInterval(_intervalId)
+    set({ _intervalId: null })
   },
 
   flagCheck: () => {

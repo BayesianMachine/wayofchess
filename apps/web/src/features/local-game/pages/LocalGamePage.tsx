@@ -1,4 +1,4 @@
-import { useEffect, useCallback, useState, useMemo } from 'react'
+import { useEffect, useCallback, useState, useMemo, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Board, MoveList } from '@/features/chess-board'
 import { Button, GameResultOverlay, Modal, PlayerPanel, useToast } from '@/shared/ui'
@@ -6,8 +6,14 @@ import { useLocalGameStore } from '@/features/local-game/state/localGameStore'
 import { useClockStore } from '@/features/local-game/state/clockStore'
 import type { Square, PromotionPiece, Color, MoveResult } from '@/shared/types'
 import { narrativeService } from '@/features/local-game/services/narrativeService'
-import { loadLocalSetup } from '../services/localGameStorage'
-import { NARRATIVE_ENABLED_STORAGE_KEY } from '../config/storageKeys'
+import { loadClock, loadPreferences } from '../services/gameRepository'
+import {
+  archiveCurrentGame,
+  checkpointCurrentClock,
+  checkpointCurrentGame,
+  timeoutResult,
+} from '../services/persistenceService'
+import { reconcileClock } from '../services/clockRecovery'
 
 function factionForColor(color: Color): 'mandalorian' | 'imperial' {
   return color === 'w' ? 'mandalorian' : 'imperial'
@@ -36,15 +42,16 @@ export default function LocalGamePage() {
     selectedSquare,
     legalMovesFromSelected,
     lastMove,
-    startLocalGame,
     selectSquare,
     submitMove,
     resign,
     endGame,
     reset,
+    warning,
+    setWarning,
   } = useLocalGameStore()
 
-  const { whiteMs, blackMs, init, startFor, addIncrement, flagCheck, reset: resetClock } =
+  const { whiteMs, blackMs, startFor, addIncrement, flagCheck, reset: resetClock } =
     useClockStore()
 
   const legalMoves = useMemo(
@@ -54,11 +61,13 @@ export default function LocalGamePage() {
         : [],
     [selectedSquare, legalMovesFromSelected]
   )
+  const handledMoveCount = useRef(moves.length)
 
   useEffect(() => {
     narrativeService.setToastFn(showToast)
-    const enabled = localStorage.getItem(NARRATIVE_ENABLED_STORAGE_KEY) !== 'false'
-    narrativeService.setEnabled(enabled)
+    void loadPreferences().then((preferences) => {
+      narrativeService.setEnabled(preferences?.narrativeEnabled ?? true)
+    })
     narrativeService.triggerGameStart('mandalorian', 1000)
 
     return () => {
@@ -73,21 +82,12 @@ export default function LocalGamePage() {
   }, [status, result, endReason])
 
   useEffect(() => {
-    const config = loadLocalSetup()
-
-    const { status: gameStatus } = useLocalGameStore.getState()
-    if (gameStatus === 'idle') {
-      startLocalGame(config.timeControlBaseSec, config.timeControlIncSec)
+    if (!fen || status === 'idle') {
+      navigate('/', { replace: true })
+      return
     }
-
-    if (config.timeControlBaseSec > 0) {
-      setClockEnabled(true)
-      init(config.timeControlBaseSec, config.timeControlIncSec)
-      if (useLocalGameStore.getState().status === 'active') {
-        startFor('w')
-      }
-    }
-  }, [startLocalGame, init, startFor])
+    setClockEnabled(useLocalGameStore.getState().timeControlBaseSec > 0)
+  }, [fen, status, navigate])
 
   useEffect(() => {
     if (!clockEnabled || status !== 'active') return
@@ -103,29 +103,99 @@ export default function LocalGamePage() {
     return () => clearInterval(id)
   }, [clockEnabled, status, flagCheck, endGame])
 
+  useEffect(() => {
+    if (!clockEnabled || status !== 'active') return
+    const id = setInterval(() => {
+      void checkpointCurrentClock().catch(() => {
+        setWarning('Clock persistence failed. Play can continue in this tab.')
+      })
+    }, 5000)
+    return () => clearInterval(id)
+  }, [clockEnabled, status, setWarning])
+
+  useEffect(() => {
+    if (moves.length <= handledMoveCount.current) {
+      handledMoveCount.current = moves.length
+      return
+    }
+    handledMoveCount.current = moves.length
+    const last = moves.at(-1)
+    const mover: Color = turn === 'w' ? 'b' : 'w'
+    if (last) triggerMoveNarrative(last, mover)
+
+    if (clockEnabled && useClockStore.getState().isRunning) {
+      addIncrement(mover)
+      if (status === 'active') startFor(turn)
+    }
+
+    void checkpointCurrentGame().catch(() => {
+      setWarning('This move could not be saved, but play can continue.')
+    })
+  }, [moves, turn, status, clockEnabled, addIncrement, startFor, setWarning])
+
+  useEffect(() => {
+    const checkpointAndSuspend = () => {
+      if (document.visibilityState === 'hidden') {
+        void checkpointCurrentClock()
+        useClockStore.getState().suspend()
+      } else {
+        void (async () => {
+          const persisted = await loadClock()
+          if (!persisted) return
+          const reconciled = reconcileClock(persisted)
+          useClockStore.getState().restore(
+            {
+              whiteMs: reconciled.whiteMs,
+              blackMs: reconciled.blackMs,
+              incrementMs: persisted.incrementMs,
+              activeColor: reconciled.timedOutColor ? null : persisted.activeColor,
+              isRunning: reconciled.timedOutColor ? false : persisted.isRunning,
+            },
+            !reconciled.timedOutColor
+          )
+          if (reconciled.warning) setWarning(reconciled.warning)
+          if (reconciled.timedOutColor) {
+            endGame(timeoutResult(reconciled.timedOutColor), 'timeout')
+          }
+        })()
+      }
+    }
+    const pageHide = () => {
+      void checkpointCurrentClock()
+      useClockStore.getState().suspend()
+    }
+    document.addEventListener('visibilitychange', checkpointAndSuspend)
+    window.addEventListener('pagehide', pageHide)
+    return () => {
+      document.removeEventListener('visibilitychange', checkpointAndSuspend)
+      window.removeEventListener('pagehide', pageHide)
+    }
+  }, [endGame, setWarning])
+
+  useEffect(() => {
+    if (status !== 'ended') return
+    useClockStore.getState().stop()
+    void archiveCurrentGame().catch(() => {
+      setWarning('The completed game could not be added to history.')
+    })
+  }, [status, setWarning])
+
   const handleMove = useCallback(
     (from: Square, to: Square, promotion?: PromotionPiece) => {
-      const mover = turn
-      const ok = submitMove(from, to, promotion)
-      if (!ok) return
-
-      if (clockEnabled && useClockStore.getState().isRunning) {
-        addIncrement(mover)
-        const nextTurn = mover === 'w' ? 'b' : 'w'
-        if (useLocalGameStore.getState().status === 'active') {
-          startFor(nextTurn)
-        }
-      }
-
-      const last = useLocalGameStore.getState().moves.at(-1)
-      if (last) triggerMoveNarrative(last, mover)
+      submitMove(from, to, promotion)
     },
-    [turn, submitMove, clockEnabled, addIncrement, startFor]
+    [submitMove]
   )
 
-  const handleNewGame = () => {
+  const handleNewGame = async () => {
+    await archiveCurrentGame().catch(() => undefined)
     reset()
     resetClock()
+    navigate('/')
+  }
+
+  const handleHome = async () => {
+    await archiveCurrentGame().catch(() => undefined)
     navigate('/')
   }
 
@@ -144,6 +214,11 @@ export default function LocalGamePage() {
         md:grid-cols-[1fr_min(16rem,28%)]
         md:[grid-template-areas:'top_top'_'board_sidebar'_'bottom_bottom']"
     >
+      {warning && (
+        <div role="status" className="[grid-area:top] z-10 justify-self-center self-start mt-1 border border-mando-gold/40 bg-space-bg px-3 py-1 text-xs text-mando-silver">
+          {warning}
+        </div>
+      )}
       <div className="[grid-area:top]">
         <PlayerPanel
           username="Black"
@@ -226,7 +301,7 @@ export default function LocalGamePage() {
           result={result}
           reason={endReason}
           onNewGame={handleNewGame}
-          onHome={() => navigate('/')}
+          onHome={handleHome}
         />
       )}
     </div>

@@ -1,22 +1,27 @@
-import { LOCAL_SETUP_STORAGE_KEY } from '../config/storageKeys'
 import type { LocalSetupConfig } from '../types'
+import { createPreferences, loadPreferences, savePreferences } from './gameRepository'
 
 const DEFAULT_LOCAL_SETUP: LocalSetupConfig = {
   timeControlBaseSec: 0,
   timeControlIncSec: 0,
 }
 
-export function loadLocalSetup(): LocalSetupConfig {
-  const raw = localStorage.getItem(LOCAL_SETUP_STORAGE_KEY)
-  if (!raw) return DEFAULT_LOCAL_SETUP
-
-  try {
-    return JSON.parse(raw) as LocalSetupConfig
-  } catch {
-    return DEFAULT_LOCAL_SETUP
+export async function loadLocalSetup(): Promise<LocalSetupConfig> {
+  const preferences = await loadPreferences()
+  if (!preferences) return DEFAULT_LOCAL_SETUP
+  return {
+    timeControlBaseSec: preferences.timeControlBaseSec,
+    timeControlIncSec: preferences.timeControlIncSec,
   }
 }
 
-export function saveLocalSetup(config: LocalSetupConfig): void {
-  localStorage.setItem(LOCAL_SETUP_STORAGE_KEY, JSON.stringify(config))
+export async function saveLocalSetup(config: LocalSetupConfig): Promise<void> {
+  const existing = await loadPreferences()
+  await savePreferences(
+    createPreferences(
+      config.timeControlBaseSec,
+      config.timeControlIncSec,
+      existing?.narrativeEnabled ?? true
+    )
+  )
 }

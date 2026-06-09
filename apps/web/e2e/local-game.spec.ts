@@ -54,14 +54,19 @@ test.describe('Local game — setup page', () => {
 // ---------------------------------------------------------------------------
 
 test.describe('Local game — board', () => {
-  test('direct game URL survives a browser refresh', async ({ page }) => {
-    await page.goto('/game')
-    const board = new BoardPage(page)
-    await board.waitForBoardReady()
-
+  test('browser refresh offers explicit recovery and resumes the game', async ({ page }) => {
+    const board = await startLocalGame(page)
+    await board.makeMove('e2', 'e4')
+    await expect(page.getByText('e4', { exact: true })).toBeVisible()
+    await page.waitForTimeout(200)
     await page.reload()
+
+    await expect(page).toHaveURL(/\/$/)
+    await expect(page.getByRole('heading', { name: 'Unfinished game found' })).toBeVisible()
+    await page.getByRole('button', { name: 'Resume' }).click()
+    await expect(page).toHaveURL(/\/game$/)
     await board.waitForBoardReady()
-    await board.expectBoardVisible()
+    await expect(page.getByText('e4', { exact: true })).toBeVisible()
   })
 
   test('chess board is visible after starting', async ({ page }) => {
@@ -262,5 +267,66 @@ test.describe('Local game — game over overlay', () => {
 
     await expect(page).toHaveURL(/\/$/)
     await expect(page.getByRole('heading', { name: /pass.*play/i })).toBeVisible()
+  })
+})
+
+test.describe('Local game — persistence and history', () => {
+  test('discard removes a recoverable active game', async ({ page }) => {
+    await startLocalGame(page)
+    await page.waitForTimeout(200)
+    await page.reload()
+
+    await expect(page.getByRole('heading', { name: 'Unfinished game found' })).toBeVisible()
+    await page.getByRole('button', { name: 'Discard' }).click()
+    await expect(page.getByRole('button', { name: 'Start Game' })).toBeVisible()
+    await expect(page.getByRole('button', { name: 'Resume' })).toHaveCount(0)
+  })
+
+  test('completed game appears in history with final board and moves', async ({ page }) => {
+    const board = await startLocalGame(page)
+    await board.makeMove('e2', 'e4')
+    const game = new GamePage(page)
+    await game.clickResign('black')
+    await game.waitForGameOver()
+    await page.getByRole('button', { name: 'Home' }).click()
+
+    await page.getByRole('button', { name: 'History' }).click()
+    await expect(page.getByRole('heading', { name: 'Game History' })).toBeVisible()
+    await page.getByText(/1-0.*resignation/i).click()
+    await expect(page.getByRole('heading', { name: /1-0.*resignation/i })).toBeVisible()
+    await expect(page.getByText('e4', { exact: true })).toBeVisible()
+    await expect(page.locator('img')).toHaveCount(32)
+  })
+
+  test('corrupt backup import makes no changes', async ({ page }) => {
+    await page.goto('/data')
+    await page.getByRole('button', { name: 'Import Backup' }).click()
+    await page.locator('input[type="file"]').setInputFiles({
+      name: 'corrupt.json',
+      mimeType: 'application/json',
+      buffer: Buffer.from('{"format":"wrong"}'),
+    })
+    await expect(page.getByRole('status')).toContainText(/corrupt|unsupported/i)
+  })
+
+  test('backup export and import restores an active game', async ({ page }) => {
+    const board = await startLocalGame(page)
+    await board.makeMove('e2', 'e4')
+    await page.waitForTimeout(200)
+    await page.goto('/data')
+
+    const downloadPromise = page.waitForEvent('download')
+    await page.getByRole('button', { name: 'Export Backup' }).click()
+    const download = await downloadPromise
+    const backupPath = await download.path()
+    expect(backupPath).toBeTruthy()
+
+    await page.getByRole('button', { name: 'Reset Local Data' }).click()
+    await page.getByRole('button', { name: 'Confirm Reset' }).click()
+    await page.goto('/data')
+    await page.locator('input[type="file"]').setInputFiles(backupPath!)
+    await expect(page.getByRole('status')).toContainText('imported successfully')
+    await page.getByRole('button', { name: 'Back', exact: true }).click()
+    await expect(page.getByRole('button', { name: 'Resume' })).toBeVisible()
   })
 })

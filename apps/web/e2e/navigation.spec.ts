@@ -31,8 +31,8 @@ test.describe('Local-only navigation', () => {
 
   test('legacy local game redirects to the active game route', async ({ page }) => {
     await page.goto('/play/local/game')
-    await expect(page).toHaveURL(/\/game$/)
-    await expect(page.locator('[role="grid"]')).toBeVisible()
+    await expect(page).toHaveURL(/\/$/)
+    await expect(page.getByRole('heading', { name: /pass.*play/i })).toBeVisible()
   })
 
   for (const route of REMOVED_ROUTES) {
