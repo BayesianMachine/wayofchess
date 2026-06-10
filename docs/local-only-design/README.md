@@ -4,6 +4,9 @@ This directory is the durable implementation record for the local-only release.
 Start with [ARCHITECTURE_PLAN.md](./ARCHITECTURE_PLAN.md), then execute the phase
 documents in numerical order.
 
+All implementation work is integrated into `main`. This directory now serves as
+the historical decision record and release-verification checklist.
+
 ## Phase Documents
 
 1. [Phase 1 - Establish Boundaries](./PHASE_1_ESTABLISH_BOUNDARIES.md)
@@ -12,6 +15,19 @@ documents in numerical order.
 4. [Phase 4 - Add Offline Persistence](./PHASE_4_OFFLINE_PERSISTENCE.md)
 5. [Phase 5 - Build And Deploy The PWA](./PHASE_5_BUILD_DEPLOY_PWA.md)
 6. [Phase 6 - Verify The Product](./PHASE_6_VERIFY_PRODUCT.md)
+
+## Current Release State
+
+| Phase | State | Integrated commit |
+| --- | --- | --- |
+| 1-2 | Complete | `c35584d` |
+| 3 | Complete | `3a2d19a` |
+| 4 | Complete | `c7de7e5` |
+| 5 | Complete; physical Android release evidence transferred to Phase 6 | `1c4dacb` |
+| 6 | Automated verification complete; physical Android gate pending | `fe8329e` |
+
+No Phase 7 scope has been approved. APK packaging remains a separate future
+project rather than an implied continuation of this release.
 
 ## Checkpoint Protocol
 

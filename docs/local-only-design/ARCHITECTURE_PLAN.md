@@ -1,8 +1,18 @@
 # Local-Only Architecture Plan
 
-**Status:** Proposed for review  
-**Branch:** `feature/local-only`  
+**Status:** Implemented on `main`; physical Android release verification pending
+**Branch:** `main`
 **First-iteration scope:** Offline local pass-and-play chess on an Android tablet
+
+## Implementation Outcome
+
+The local-only architecture is implemented and deployed from
+`BayesianMachine/wayofchess`. Phases 1 through 6 are integrated into `main`,
+with automated release verification complete. The remaining release gate is
+physical Android Chrome evidence for installation, standalone landscape launch,
+airplane-mode cold start, system-UI clearance, and active-clock recovery.
+
+Production: <https://bayesianmachine.github.io/wayofchess/>
 
 ## Goal
 
@@ -523,9 +533,9 @@ Detailed execution checklists and handoff records are indexed in
 - CI builds and tests only the local web app and chess engine
 - Documentation describes the one-process development workflow
 
-## Review Decisions
+## Confirmed Review Decisions
 
-Please confirm these choices before implementation:
+The following choices were confirmed before implementation:
 
 1. **AI scope:** Defer computer play so the first iteration is strictly
    pass-and-play.

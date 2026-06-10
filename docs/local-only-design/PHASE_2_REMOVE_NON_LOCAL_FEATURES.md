@@ -177,7 +177,7 @@ until Phase 3, after all frontend references are proven gone.
 
 ## Next Handoff
 
-- Final commit: None; the user requested no commit as part of this phase.
+- Final commit: Integrated with Phase 1 in `c35584d`.
 - Remaining known risks: tracked generated `.js` twins still contain removed
   code and prevent a clean ESLint run until Phase 3.
 - Important decisions: legacy active local games rehydrate under the stable

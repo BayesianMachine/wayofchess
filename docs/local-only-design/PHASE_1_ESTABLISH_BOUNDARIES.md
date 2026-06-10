@@ -191,7 +191,7 @@ in this phase.
 
 Complete this section when the phase passes:
 
-- Final commit: Not yet committed.
+- Final commit: Integrated with Phase 2 in `c35584d`.
 - Remaining known risks: ESLint plugin configuration is incomplete; one online
   E2E text locator is ambiguous; generated `.js` siblings still exist by design.
 - Important decisions: Mixed AI/local store remains transitional; shared

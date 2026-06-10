@@ -1,6 +1,7 @@
 # Phase 6 - Verify The Product
 
-**Status:** Automated Verification Complete - Android Device Verification Pending
+**Status:** In Progress
+**Substatus:** Physical Android verification pending
 **Depends on:** Phase 5 complete  
 **Unlocks:** Local-only release
 
@@ -106,7 +107,7 @@ must be recorded with evidence.
 ## Release Acceptance Criteria
 
 - [ ] Every acceptance criterion in the architecture plan passes.
-- [ ] Every prior phase is marked `Complete`.
+- [x] Every prior phase is marked `Complete`.
 - [x] Automated checks pass from a clean checkout.
 - [ ] A full game is completed on a real Android tablet in airplane mode.
 - [ ] Active-game recovery and elapsed-clock handling pass on the tablet.
@@ -160,8 +161,8 @@ must be recorded with evidence.
 | 2026-06-10 | Detached clean worktree plus `pnpm install --frozen-lockfile` | Passed from commit `da3d491`; 589 packages installed from the lockfile. |
 | 2026-06-10 | Complete validation in detached clean worktree | Passed lint, typecheck, 28 tests, two builds, offline verification, 101 E2E tests, and two PWA scenarios; Git status stayed clean. |
 | 2026-06-10 | Clean-worktree process audit | One Vite listener started on `127.0.0.1:5173`; duplicate startup exited 1 and listener count remained one. |
-| 2026-06-10 | GitHub CI run `27245863685` | Passed for the Phase 6 release candidate. |
-| 2026-06-10 | GitHub Pages run `27245863665` | Passed; the published bundle returned HTTP 200 and contained the Phase 6 commit version. |
+| 2026-06-10 | GitHub CI run `27245954146` | Passed for the reconciled Phase 6 release candidate. |
+| 2026-06-10 | GitHub Pages run `27245954150` | Passed; the published bundle returned HTTP 200 and contained the Phase 6 commit version. |
 
 ### Android Device Evidence
 
@@ -173,7 +174,7 @@ must be recorded with evidence.
 
 - Production URL: <https://bayesianmachine.github.io/wayofchess/>
 - Release version: Phase 6 release candidate from this commit, deployed to Pages.
-- Commit: Phase 6 verification commit (this commit).
+- Commit: `fe8329e` for the Phase 6 implementation and automated evidence.
 - Test report: 28 unit/engine tests, 101 E2E tests, and two PWA scenarios passed.
 - Screenshots: `evidence/phase-6/game-1024x600.png`,
   `game-1280x800.png`, and `game-1366x768.png`.
@@ -201,7 +202,8 @@ must be recorded with evidence.
 ## Final Handoff
 
 - Release status: Release candidate; physical Android verification required.
-- Released commit/version: Phase 6 verification commit (this commit), deployed to Pages.
+- Released commit/version: `fe8329e`, deployed to Pages; the subsequent
+  documentation reconciliation does not change application behavior.
 - Production URL: <https://bayesianmachine.github.io/wayofchess/>
 - Known residual risks: Chrome install UI, Android system-UI overlap, standalone
   landscape enforcement, and airplane-mode cold launch remain unverified on a

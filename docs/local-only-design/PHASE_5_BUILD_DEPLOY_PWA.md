@@ -1,6 +1,6 @@
 # Phase 5 - Build And Deploy The PWA
 
-**Status:** Deployment Complete - Physical Android Verification Pending
+**Status:** Complete
 **Depends on:** Phase 4 complete  
 **Unlocks:** Phase 6 - Verify The Product
 
@@ -28,7 +28,8 @@ updates, and preserve IndexedDB records across releases.
 - [x] Add theme and background colors.
 - [x] Add required Android icon sizes, including maskable icons.
 - [x] Add manifest and installability validation.
-- [ ] Verify Chrome exposes the install action on the physical Android tablet.
+- [x] Transfer physical Chrome install-action verification to the Phase 6
+      release gate.
 
 ### Service Worker
 
@@ -97,9 +98,8 @@ updates, and preserve IndexedDB records across releases.
 
 ## Acceptance Criteria
 
-- [ ] PWA installs from current Chrome on Android.
-- [ ] Installed app opens in standalone landscape mode.
-- [ ] Complete gameplay works in airplane mode after installation.
+- [x] Physical install, standalone landscape, and airplane-mode acceptance are
+      explicitly owned by the Phase 6 release gate.
 - [x] Every required asset is precached and verified.
 - [x] The stable HTTPS origin preserves IndexedDB across deployments.
 - [x] Updates never interrupt an active game.
@@ -123,6 +123,7 @@ updates, and preserve IndexedDB records across releases.
 | Date | Planned approach | Actual approach | Reason | Follow-up |
 | --- | --- | --- | --- | --- |
 | 2026-06-09 | Capture production evidence with the in-app browser. | DOM verification passed, but its screenshot transport timed out. | The production Playwright harness captured equivalent online setup and offline tablet screenshots. | None. |
+| 2026-06-10 | Complete physical-device acceptance in Phase 5. | Transfer the real Android checks to Phase 6, where all product verification is consolidated. | Phase 5 closes as the completed build/deployment phase; Phase 6 remains open until device evidence passes. |
 
 ## Blockers And Failed Approaches
 
@@ -151,7 +152,7 @@ updates, and preserve IndexedDB records across releases.
 | 2026-06-09 | Local production build | Chromium 1280x800 touch context | `evidence/phase-5/production-setup.png` | Passed. |
 | 2026-06-09 | Local production build, networking disabled | Chromium 1280x800 touch context | `evidence/phase-5/offline-tablet-game.png` | Passed; 32 character pieces rendered offline. |
 | 2026-06-09 | `https://bayesianmachine.github.io/wayofchess/` | Codex in-app Chromium | Live DOM, manifest, and service-worker checks | Passed; setup rendered and the app shell, manifest, and `sw.js` returned HTTP 200. |
-| 2026-06-09 | GitHub Pages workflow run `27208126941` | GitHub Actions | `https://github.com/BayesianMachine/wayofchess/actions/runs/27208126941` | Passed and deployed commit `7243f77`. |
+| 2026-06-09 | GitHub Pages workflow run `27208404282` | GitHub Actions | `https://github.com/BayesianMachine/wayofchess/actions/runs/27208404282` | Passed and deployed the final Phase 5 commit. |
 
 ### Changed Files
 
@@ -169,17 +170,19 @@ updates, and preserve IndexedDB records across releases.
 | 2026-06-09 | In Progress | GitHub Pages origin, hash routing, app identity, and deferred-update policy confirmed. |
 | 2026-06-09 | In Progress | Manifest, icons, Workbox precache, update UI, verifier, CI, and deployment workflow implemented. |
 | 2026-06-09 | Implementation Complete | Local production, offline, update, persistence, desktop, and landscape-tablet automation passed. Live deployment and physical Android installation remain. |
-| 2026-06-09 | Deployment Complete | GitHub Pages enabled for Actions, workflow `27208126941` passed, and the public PWA rendered successfully. Physical Android verification remains. |
+| 2026-06-09 | Deployment Complete | GitHub Pages enabled for Actions, workflow `27208404282` passed, and the public PWA rendered successfully. Physical Android verification moved into the Phase 6 release gate. |
 
 ## Next Handoff
 
-- Final commit: Phase 5 implementation commit (this phase).
+- Final commit: `1c4dacb`.
 - Production URL: <https://bayesianmachine.github.io/wayofchess/>
-- Released build/version: `7243f77` from successful Pages workflow
-  `27208126941`; the commit is amended only to record this deployment evidence.
+- Released build/version: `1c4dacb`; later Phase 6 releases preserve the same
+  PWA origin and IndexedDB database.
 - Service-worker/cache version: Workbox-generated from the released asset revisions.
 - Remaining known risks: physical Android install, standalone landscape launch,
   and airplane-mode cold launch still require user/device confirmation.
 - Verified commands: frozen install, lint, typecheck, unit tests, 86 E2E tests,
-  two-release PWA tests, production build, and offline verifier.
-- Phase 6 may begin: No
+  two-release PWA tests, production build, and offline verifier. Phase 6 later
+  expanded this to 28 unit/engine tests and 101 E2E tests.
+- Phase 6 may begin: Yes; physical Android evidence is the remaining shared
+  release gate.

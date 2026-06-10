@@ -6,6 +6,10 @@ no account, API, database, Docker, or network service.
 
 **Installable app:** <https://bayesianmachine.github.io/wayofchess/>
 
+**Release state:** all implementation is integrated into `main`; automated
+desktop, tablet-viewport, persistence, offline, and update verification passes.
+Physical Android installation and airplane-mode evidence remain the final gate.
+
 ## Features
 
 - Full chess rules through the shared chess engine

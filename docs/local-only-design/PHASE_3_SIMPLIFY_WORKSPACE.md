@@ -163,7 +163,7 @@ root package and workspace configuration
 
 ## Next Handoff
 
-- Final commit: None; no commit was requested.
+- Final commit: `3a2d19a`.
 - Remaining known risks: PWA hosting, offline caching, and IndexedDB persistence
   are intentionally deferred to Phases 4 and 5.
 - Important decisions: Turbo remains for two-package validation; `pnpm dev`

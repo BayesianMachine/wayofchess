@@ -63,3 +63,27 @@ Copy this block for future incidents:
   run typecheck and production build.
 - Prevention: Before changing visual assets, prove that the intended rendering
   branch executes and inspect the runtime type of transformed asset imports.
+
+### 2026-06-10: Touch Promotion Bypassed the Promotion Dialog
+
+- Symptom: Ordinary tap-to-move worked, but moving a pawn to the final rank on a
+  touch viewport did not open the promotion choices.
+- Runtime evidence: A seeded legal promotion position selected the pawn, but
+  tapping the destination produced no move and no promotion dialog at three
+  landscape viewport sizes.
+- Misleading signals: Engine promotion tests passed, mouse-oriented board tests
+  passed, and ordinary pawn taps worked. Those signals did not exercise the
+  touch destination through the promotion UI.
+- Root cause: Tap destinations called the game store directly. The store tried
+  to submit the move without a promotion piece, while the promotion dialog
+  existed only in the board's separate move path.
+- Fix: Give the board's 64 square buttons sole ownership of tap and drag
+  interaction, make piece artwork presentation-only, and route every legal
+  destination through the board move pipeline.
+- Verification: Seed a replay-valid promotion position through backup import,
+  tap the source and destination using Playwright touchscreen input, select a
+  promotion piece, and assert the resulting SAN at 1024x600, 1280x800, and
+  1366x768.
+- Prevention: A visual layer should not compete with its interaction layer.
+  Test rule-specific UI with the actual input modality, not only at the engine
+  or store level.

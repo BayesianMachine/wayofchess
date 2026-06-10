@@ -186,7 +186,7 @@ Persist domain records, not Zustand or React internals.
 
 ## Next Handoff
 
-- Final commit: Not created, per execution-plan instruction.
+- Final commit: `c7de7e5`.
 - Database version: `mandalorian-chess` version 1; record version 1.
 - Export format version: `mandalorian-chess-backup` version 1.
 - Remaining known risks: Chrome may deny persistent storage or evict data under

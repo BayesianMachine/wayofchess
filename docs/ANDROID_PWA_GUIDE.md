@@ -13,6 +13,21 @@ Do not email or open the generated static folder directly. The stable HTTPS
 address is what keeps installation, updates, and IndexedDB history attached to
 one browser origin.
 
+## Release Verification
+
+The automated release suite is complete. To close the remaining physical-device
+gate, record the tablet model, Android version, and Chrome version, then verify:
+
+1. Chrome offers **Install app** or **Add to Home screen**.
+2. The installed app launches standalone and remains usable in landscape.
+3. A game can be started, closed, resumed, and completed in airplane mode.
+4. A running clock deducts elapsed time after backgrounding or closing the app.
+5. Android browser and system controls do not cover the board or game actions.
+
+Add the results and screenshots to
+`docs/local-only-design/PHASE_6_VERIFY_PRODUCT.md`. Do not mark the local-only
+release complete until these checks pass on a real Android tablet.
+
 ## Updates
 
 Reconnect the tablet and open the installed app. A downloaded release displays
