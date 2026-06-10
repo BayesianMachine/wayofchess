@@ -209,7 +209,7 @@ export default function LocalGamePage() {
 
   return (
     <div
-      className="grid gap-3 max-w-6xl mx-auto px-4 py-4 min-h-[calc(100vh-4rem)] grid-cols-1
+      className="grid gap-3 max-w-6xl mx-auto px-4 py-4 h-dvh overflow-hidden grid-cols-1
         [grid-template-areas:'top'_'board'_'bottom'_'sidebar']
         md:grid-cols-[1fr_min(16rem,28%)]
         md:[grid-template-areas:'top_top'_'board_sidebar'_'bottom_bottom']"

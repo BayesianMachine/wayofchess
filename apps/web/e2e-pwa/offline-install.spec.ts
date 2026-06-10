@@ -50,9 +50,13 @@ test('manifest is installable and every gameplay asset works offline', async ({
   await expect(page.locator('img')).toHaveCount(32)
   await board.makeMove('e2', 'e4')
   await expect(page.getByText('e4', { exact: true })).toBeVisible()
+  const game = new GamePage(page)
+  await game.clickResign('black')
+  await game.waitForGameOver()
 
   await page.goto('http://127.0.0.1:4173/wayofchess/#/history')
   await expect(page.getByRole('heading', { name: 'Game History' })).toBeVisible()
+  await expect(page.getByText(/1-0.*resignation/i)).toBeVisible()
   await page.goto('http://127.0.0.1:4173/wayofchess/#/data')
   await expect(page.getByRole('heading', { name: 'Backup & Data' })).toBeVisible()
 })

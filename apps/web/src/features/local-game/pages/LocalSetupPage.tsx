@@ -166,7 +166,7 @@ export default function LocalSetupPage() {
                       timeControlIncSec: tc.incrementSec,
                     })
                   }
-                  className={`px-3 py-2 rounded-md text-sm border transition-colors ${
+                  className={`min-h-11 px-3 py-2 rounded-md text-sm border transition-colors ${
                     active
                       ? 'bg-mando-gold/30 border-mando-gold text-mando-gold'
                       : 'border-mando-gold/30 text-mando-silver hover:border-mando-gold/60'
@@ -179,7 +179,7 @@ export default function LocalSetupPage() {
             <button
               type="button"
               onClick={() => setSelected(NO_CLOCK)}
-              className={`px-3 py-2 rounded-md text-sm border transition-colors ${
+              className={`min-h-11 px-3 py-2 rounded-md text-sm border transition-colors ${
                 isNoClock
                   ? 'bg-mando-gold/30 border-mando-gold text-mando-gold'
                   : 'border-mando-gold/30 text-mando-silver hover:border-mando-gold/60'

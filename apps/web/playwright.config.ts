@@ -13,7 +13,11 @@ export default defineConfig({
     screenshot: 'only-on-failure',
   },
   projects: [
-    { name: 'chromium', use: { ...devices['Desktop Chrome'] } },
+    {
+      name: 'chromium',
+      use: { ...devices['Desktop Chrome'] },
+      testIgnore: '**/release-verification.spec.ts',
+    },
     {
       name: 'tablet-landscape',
       use: {
@@ -22,6 +26,33 @@ export default defineConfig({
         hasTouch: true,
       },
       testMatch: ['**/local-game.spec.ts', '**/navigation.spec.ts'],
+    },
+    {
+      name: 'release-tablet-1024x600',
+      use: {
+        ...devices['Desktop Chrome'],
+        viewport: { width: 1024, height: 600 },
+        hasTouch: true,
+      },
+      testMatch: '**/release-verification.spec.ts',
+    },
+    {
+      name: 'release-tablet-1280x800',
+      use: {
+        ...devices['Desktop Chrome'],
+        viewport: { width: 1280, height: 800 },
+        hasTouch: true,
+      },
+      testMatch: '**/release-verification.spec.ts',
+    },
+    {
+      name: 'release-tablet-1366x768',
+      use: {
+        ...devices['Desktop Chrome'],
+        viewport: { width: 1366, height: 768 },
+        hasTouch: true,
+      },
+      testMatch: '**/release-verification.spec.ts',
     },
   ],
   webServer: {

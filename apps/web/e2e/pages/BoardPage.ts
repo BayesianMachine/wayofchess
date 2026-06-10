@@ -35,7 +35,7 @@ export class BoardPage {
    * Returns the pixel center of a square name (e.g. "e2") relative to the viewport.
    * Assumes white-at-bottom orientation (the default).
    */
-  private async squareCenter(square: string): Promise<{ x: number; y: number }> {
+  async squareCenter(square: string): Promise<{ x: number; y: number }> {
     const bbox = await this.board.boundingBox()
     if (!bbox) throw new Error('[BoardPage] Board element has no bounding box')
 
@@ -90,5 +90,12 @@ export class BoardPage {
   async makeMove(from: string, to: string) {
     await this.clickSquare(from)
     await this.clickSquare(to)
+  }
+
+  async tapMove(from: string, to: string) {
+    const source = await this.squareCenter(from)
+    const target = await this.squareCenter(to)
+    await this.page.touchscreen.tap(source.x, source.y)
+    await this.page.touchscreen.tap(target.x, target.y)
   }
 }

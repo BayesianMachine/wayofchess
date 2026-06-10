@@ -21,7 +21,7 @@ export interface BoardProps {
 }
 
 function computeBoardSize(): number {
-  return Math.min(window.innerWidth * 0.9, window.innerHeight * 0.85, 600)
+  return Math.max(352, Math.min(window.innerWidth * 0.9, window.innerHeight - 170, 600))
 }
 
 function clientToSquare(
@@ -176,10 +176,9 @@ export default function Board({
 
   const isLegalTarget = useCallback(
     (from: Square, to: Square) => {
-      const entry = legalMoves.find((m) => m.from === from)
-      return entry?.legalTargets.includes(to) ?? false
+      return game.getLegalMovesFrom(from).includes(to)
     },
-    [legalMoves]
+    [game]
   )
 
   const needsPromotion = useCallback(
@@ -207,6 +206,10 @@ export default function Board({
 
   const handleSquareClick = (sq: Square) => {
     if (!interactive) return
+    if (selectedSquare && isLegalTarget(selectedSquare, sq)) {
+      attemptMove(selectedSquare, sq)
+      return
+    }
     onSquareClick?.(sq)
   }
 
@@ -216,7 +219,6 @@ export default function Board({
     setDragFrom(sq)
     setIsDragging(true)
     setGhostPos({ x: e.clientX, y: e.clientY })
-    onSquareClick?.(sq)
   }
 
   useEffect(() => {
@@ -259,7 +261,7 @@ export default function Board({
 
   return (
     <div
-      className={`relative inline-block${isShaking ? ' animate-board-shake' : ''}`}
+      className={`chess-board relative inline-block${isShaking ? ' animate-board-shake' : ''}`}
       ref={boardRef}
     >
       <BoardBackground size={boardSize} flipped={flipped} />
@@ -281,9 +283,13 @@ export default function Board({
               <button
                 key={sq}
                 type="button"
-                className="absolute p-0 border-0 bg-transparent cursor-pointer"
+                className="absolute z-20 p-0 border-0 bg-transparent cursor-pointer"
                 style={squareStyle(sq)}
                 onClick={() => handleSquareClick(sq)}
+                onMouseDown={(event) => {
+                  const piece = game.getPiece(sq)
+                  if (piece) handleMouseDown(event, sq, piece)
+                }}
                 aria-label={`Square ${sq}`}
               />
             )
@@ -315,9 +321,8 @@ export default function Board({
             return (
               <div
                 key={square}
-                className="absolute pointer-events-auto cursor-grab active:cursor-grabbing"
+                className="absolute pointer-events-none"
                 style={squareStyle(square)}
-                onMouseDown={(e) => handleMouseDown(e, square, piece)}
               >
                 <motion.div
                   layoutId={pieceLayoutId(square)}
