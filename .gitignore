@@ -11,3 +11,5 @@ Thumbs.db
 coverage
 playwright-report
 test-results
+.claude/
+glm-audit/
