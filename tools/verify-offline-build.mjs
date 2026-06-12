@@ -43,8 +43,11 @@ const manifest = JSON.parse(manifestText)
 if (manifest.id !== '/wayofchess/' || manifest.scope !== '/wayofchess/') {
   fail('manifest ID and scope must be /wayofchess/')
 }
-if (manifest.start_url !== '/wayofchess/#/' || manifest.orientation !== 'landscape') {
-  fail('manifest start URL or orientation is incorrect')
+if (manifest.start_url !== '/wayofchess/#/') {
+  fail('manifest start URL is incorrect')
+}
+if ('orientation' in manifest) {
+  fail('manifest must allow both portrait and landscape orientation')
 }
 if (!html.includes('/wayofchess/manifest.webmanifest')) {
   fail('index.html does not reference the scoped manifest')
@@ -58,8 +61,10 @@ for (const icon of requiredIcons) {
   if (!worker.includes(icon)) fail(`${icon} is not precached`)
 }
 for (const piece of requiredPieces) {
-  const emitted = assetNames.find((name) => name.startsWith(`${piece}-`) && name.endsWith('.svg'))
-  if (!emitted) fail(`${piece}.svg was not emitted`)
+  const emitted = assetNames.find(
+    (name) => name.startsWith(`${piece}-redesign-`) && name.endsWith('.png')
+  )
+  if (!emitted) fail(`${piece}-redesign.png was not emitted`)
   if (!worker.includes(`assets/${emitted}`)) fail(`${emitted} is not precached`)
 }
 

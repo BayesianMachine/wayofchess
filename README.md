@@ -1,6 +1,6 @@
 # Mandalorian Chess
 
-A landscape-first, local pass-and-play chess game with Mandalorian and Imperial
+A responsive, local pass-and-play chess game with Mandalorian and Imperial
 character pieces. The current product runs entirely in the browser and requires
 no account, API, database, Docker, or network service.
 
@@ -16,7 +16,7 @@ Physical Android installation and airplane-mode evidence remain the final gate.
 - Two-player pass-and-play on one device
 - Mandalorian and Imperial character artwork
 - Time controls, clocks, move history, draw, resignation, and game-over flows
-- Tap-to-select and tap-to-move controls for landscape tablets
+- Tap-to-select and tap-to-move controls for phones and tablets
 - Local game recovery using browser storage
 - Installable Android Chrome PWA with complete offline gameplay
 - Versioned history backup/import and update-safe IndexedDB persistence
@@ -78,7 +78,7 @@ Production web output is written to `apps/web/dist`.
 1. Open <https://bayesianmachine.github.io/wayofchess/> in Google Chrome while online.
 2. Wait for **Ready for offline play**.
 3. Open Chrome's menu and choose **Add to Home screen** or **Install app**.
-4. Launch **The Way of Chess** from the home screen in landscape orientation.
+4. Launch **The Way of Chess** from the home screen in either portrait or landscape.
 5. Airplane mode may be enabled after the offline-ready confirmation.
 
 Updates download only while online. If an update is found during a game, it

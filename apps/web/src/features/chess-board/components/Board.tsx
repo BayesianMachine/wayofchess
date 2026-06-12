@@ -21,7 +21,7 @@ export interface BoardProps {
 }
 
 function computeBoardSize(): number {
-  return Math.max(352, Math.min(window.innerWidth * 0.9, window.innerHeight - 170, 600))
+  return Math.max(280, Math.min(window.innerWidth - 16, window.innerHeight - 240, 600))
 }
 
 function clientToSquare(
@@ -60,7 +60,8 @@ export default function Board({
   const [boardSize, setBoardSize] = useState(computeBoardSize)
   const [dragFrom, setDragFrom] = useState<Square | null>(null)
   const [isDragging, setIsDragging] = useState(false)
-  const [ghostPos, setGhostPos] = useState({ x: 0, y: 0 })
+  const ghostPos = useRef({ x: 0, y: 0 })
+  const ghostRef = useRef<HTMLDivElement>(null)
   const [promotionPending, setPromotionPending] = useState<{
     from: Square
     to: Square
@@ -104,9 +105,23 @@ export default function Board({
     if (lastMove) {
       const prevGame = new Game(prevFenRef.current)
       const mover = prevGame.getPiece(lastMove.from)
-      const victim = prevGame.getPiece(lastMove.to)
+      let victim = prevGame.getPiece(lastMove.to)
+      let captureSquare = lastMove.to
+
+      // En passant: captured pawn is not on the destination square
+      if (!victim && mover && mover.type === 'p') {
+        const { file: fromFile, rank: fromRank } = squareToCoords(lastMove.from)
+        const { file: toFile } = squareToCoords(lastMove.to)
+        if (fromFile !== toFile) {
+          // Pawn moved diagonally to an empty square — this is en passant
+          const epSquare = coordsToSquare(toFile, fromRank)
+          victim = prevGame.getPiece(epSquare)
+          captureSquare = epSquare
+        }
+      }
+
       if (victim && mover && victim.color !== mover.color) {
-        setCaptureOverlay({ square: lastMove.to, piece: victim, exiting: false })
+        setCaptureOverlay({ square: captureSquare, piece: victim, exiting: false })
         const startExit = requestAnimationFrame(() => {
           setCaptureOverlay((c) => (c ? { ...c, exiting: true } : null))
         })
@@ -218,14 +233,34 @@ export default function Board({
     e.preventDefault()
     setDragFrom(sq)
     setIsDragging(true)
-    setGhostPos({ x: e.clientX, y: e.clientY })
+    ghostPos.current = { x: e.clientX, y: e.clientY }
+    if (ghostRef.current) {
+      ghostRef.current.style.left = `${e.clientX - sqSize / 2}px`
+      ghostRef.current.style.top = `${e.clientY - sqSize / 2}px`
+    }
+  }
+
+  const handleTouchStart = (e: React.TouchEvent, sq: Square, piece: Piece) => {
+    if (!interactive || piece.color !== turn) return
+    const touch = e.touches[0]
+    setDragFrom(sq)
+    setIsDragging(true)
+    ghostPos.current = { x: touch.clientX, y: touch.clientY }
+    if (ghostRef.current) {
+      ghostRef.current.style.left = `${touch.clientX - sqSize / 2}px`
+      ghostRef.current.style.top = `${touch.clientY - sqSize / 2}px`
+    }
   }
 
   useEffect(() => {
     if (!isDragging || !dragFrom) return
 
     const onMouseMove = (e: MouseEvent) => {
-      setGhostPos({ x: e.clientX, y: e.clientY })
+      ghostPos.current = { x: e.clientX, y: e.clientY }
+      if (ghostRef.current) {
+        ghostRef.current.style.left = `${e.clientX - sqSize / 2}px`
+        ghostRef.current.style.top = `${e.clientY - sqSize / 2}px`
+      }
     }
 
     const onMouseUp = (e: MouseEvent) => {
@@ -238,11 +273,35 @@ export default function Board({
       setIsDragging(false)
     }
 
+    const onTouchMove = (e: TouchEvent) => {
+      const touch = e.touches[0]
+      ghostPos.current = { x: touch.clientX, y: touch.clientY }
+      if (ghostRef.current) {
+        ghostRef.current.style.left = `${touch.clientX - sqSize / 2}px`
+        ghostRef.current.style.top = `${touch.clientY - sqSize / 2}px`
+      }
+    }
+
+    const onTouchEnd = (e: TouchEvent) => {
+      const touch = e.changedTouches[0]
+      const rect = boardRef.current?.getBoundingClientRect()
+      if (rect) {
+        const target = clientToSquare(touch.clientX, touch.clientY, rect, boardSize, flipped)
+        if (target) attemptMove(dragFrom, target)
+      }
+      setDragFrom(null)
+      setIsDragging(false)
+    }
+
     window.addEventListener('mousemove', onMouseMove)
     window.addEventListener('mouseup', onMouseUp)
+    window.addEventListener('touchmove', onTouchMove)
+    window.addEventListener('touchend', onTouchEnd)
     return () => {
       window.removeEventListener('mousemove', onMouseMove)
       window.removeEventListener('mouseup', onMouseUp)
+      window.removeEventListener('touchmove', onTouchMove)
+      window.removeEventListener('touchend', onTouchEnd)
     }
   }, [isDragging, dragFrom, boardSize, flipped, attemptMove])
 
@@ -289,6 +348,10 @@ export default function Board({
                 onMouseDown={(event) => {
                   const piece = game.getPiece(sq)
                   if (piece) handleMouseDown(event, sq, piece)
+                }}
+                onTouchStart={(event) => {
+                  const piece = game.getPiece(sq)
+                  if (piece) handleTouchStart(event, sq, piece)
                 }}
                 aria-label={`Square ${sq}`}
               />
@@ -366,10 +429,11 @@ export default function Board({
 
       {isDragging && dragPiece && (
         <div
+          ref={ghostRef}
           className="fixed z-[60] pointer-events-none"
           style={{
-            left: ghostPos.x - sqSize / 2,
-            top: ghostPos.y - sqSize / 2,
+            left: ghostPos.current.x - sqSize / 2,
+            top: ghostPos.current.y - sqSize / 2,
             width: sqSize,
             height: sqSize,
           }}

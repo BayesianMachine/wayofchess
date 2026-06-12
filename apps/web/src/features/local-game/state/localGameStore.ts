@@ -14,6 +14,7 @@ import {
   type GameRecord,
   type StoredMove,
 } from '@/shared/persistence'
+import { useClockStore } from './clockStore'
 
 interface LocalGameStore {
   gameId: string | null
@@ -160,22 +161,41 @@ export const useLocalGameStore = create<LocalGameStore>((set, get) => ({
     const state = chess.getState()
     const end = detectGameEnd(chess)
     const now = Date.now()
-    set((current) => ({
-      fen: state.fen,
-      turn: state.turn,
-      moves: [...current.moves, moveResult],
-      storedMoves: [...current.storedMoves, { from, to, promotion, result: moveResult }],
-      lastMove: { from: moveResult.from, to: moveResult.to },
-      isCheck: state.isCheck,
-      selectedSquare: null,
-      legalMovesFromSelected: [],
-      updatedAt: now,
-    }))
-    if (end) get().endGame(end.result, end.reason)
+    if (end) {
+      useClockStore.getState().stop()
+      set((current) => ({
+        fen: state.fen,
+        turn: state.turn,
+        moves: [...current.moves, moveResult],
+        storedMoves: [...current.storedMoves, { from, to, promotion, result: moveResult }],
+        lastMove: { from: moveResult.from, to: moveResult.to },
+        isCheck: state.isCheck,
+        selectedSquare: null,
+        legalMovesFromSelected: [],
+        updatedAt: now,
+        status: 'ended',
+        result: end.result,
+        endReason: end.reason,
+      }))
+    } else {
+      set((current) => ({
+        fen: state.fen,
+        turn: state.turn,
+        moves: [...current.moves, moveResult],
+        storedMoves: [...current.storedMoves, { from, to, promotion, result: moveResult }],
+        lastMove: { from: moveResult.from, to: moveResult.to },
+        isCheck: state.isCheck,
+        selectedSquare: null,
+        legalMovesFromSelected: [],
+        updatedAt: now,
+      }))
+    }
     return true
   },
 
   endGame: (result, reason) => {
+    if (get().status !== 'active') return
+    useClockStore.getState().stop()
     set({
       status: 'ended',
       result,

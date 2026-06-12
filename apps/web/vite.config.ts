@@ -28,7 +28,6 @@ export default defineConfig(({ command }) => ({
         start_url: '/wayofchess/#/',
         scope: '/wayofchess/',
         display: 'standalone',
-        orientation: 'landscape',
         background_color: '#080c14',
         theme_color: '#080c14',
         icons: [

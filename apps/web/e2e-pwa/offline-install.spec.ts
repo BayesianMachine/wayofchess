@@ -35,7 +35,6 @@ test('manifest is installable and every gameplay asset works offline', async ({
     start_url: '/wayofchess/#/',
     scope: '/wayofchess/',
     display: 'standalone',
-    orientation: 'landscape',
   })
 
   await page.reload()

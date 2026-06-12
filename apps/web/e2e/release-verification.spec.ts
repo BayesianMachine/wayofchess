@@ -139,13 +139,27 @@ test.describe('Release tablet verification', () => {
     await expect(page.getByText('a8=Q+', { exact: true })).toBeVisible()
   })
 
-  test('portrait mode presents the rotate guard instead of a broken board', async ({
-    page,
-  }) => {
-    await page.setViewportSize({ width: 600, height: 1024 })
+  test('portrait phones can start and play without horizontal overflow', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 })
     await page.goto('/')
-    await expect(page.getByRole('heading', { name: 'Rotate to landscape' })).toBeVisible()
-    await expect(page.getByRole('heading', { name: /pass.*play/i })).not.toBeVisible()
+    await expect(page.getByRole('heading', { name: /pass.*play/i })).toBeVisible()
+    await page.getByRole('button', { name: 'No Clock' }).click()
+    await page.getByRole('button', { name: 'Start Game' }).click()
+
+    const board = page.locator('.chess-board')
+    await expect(board).toBeVisible()
+    const layout = await page.evaluate(() => {
+      const boardElement = document.querySelector('.chess-board')
+      return {
+        documentWidth: document.documentElement.scrollWidth,
+        viewportWidth: window.innerWidth,
+        boardWidth: boardElement?.getBoundingClientRect().width ?? 0,
+      }
+    })
+
+    expect(layout.documentWidth).toBeLessThanOrEqual(layout.viewportWidth)
+    expect(layout.boardWidth).toBeLessThanOrEqual(layout.viewportWidth)
+    await expect(page.getByRole('button', { name: 'Offer Draw' })).toBeVisible()
   })
 
   test('reduced motion suppresses application animations', async ({ page }) => {
