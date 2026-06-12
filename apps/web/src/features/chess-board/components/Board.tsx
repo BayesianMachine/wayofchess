@@ -156,6 +156,15 @@ export default function Board({
     return entry?.legalTargets ?? []
   }, [legalMoves, selectedSquare])
 
+  const captureTargetsForSelected = useMemo(
+    () =>
+      legalTargetsForSelected.filter((square) => {
+        const piece = game.getPiece(square)
+        return piece !== null && piece.color !== turn
+      }),
+    [game, legalTargetsForSelected, turn]
+  )
+
   const pieces: Array<{ square: Square; piece: Piece }> = useMemo(() => {
     const list: Array<{ square: Square; piece: Piece }> = []
     for (let r = 0; r < 8; r++) {
@@ -329,6 +338,7 @@ export default function Board({
         flipped={flipped}
         selectedSquare={selectedSquare}
         legalSquares={legalTargetsForSelected}
+        captureSquares={captureTargetsForSelected}
         lastMove={lastMove}
         checkSquare={checkSquare}
       />
@@ -338,6 +348,14 @@ export default function Board({
         {displayRanks.map((rankIdx) =>
           displayFiles.map((fileIdx) => {
             const sq = coordsToSquare(fileIdx, rankIdx)
+            const piece = game.getPiece(sq)
+            const isLegalDestination = legalTargetsForSelected.includes(sq)
+            const isCaptureDestination = captureTargetsForSelected.includes(sq)
+            const label = isCaptureDestination
+              ? `Square ${sq}, legal capture`
+              : isLegalDestination
+                ? `Square ${sq}, legal move`
+                : `Square ${sq}`
             return (
               <button
                 key={sq}
@@ -346,14 +364,12 @@ export default function Board({
                 style={squareStyle(sq)}
                 onClick={() => handleSquareClick(sq)}
                 onMouseDown={(event) => {
-                  const piece = game.getPiece(sq)
                   if (piece) handleMouseDown(event, sq, piece)
                 }}
                 onTouchStart={(event) => {
-                  const piece = game.getPiece(sq)
                   if (piece) handleTouchStart(event, sq, piece)
                 }}
-                aria-label={`Square ${sq}`}
+                aria-label={label}
               />
             )
           })

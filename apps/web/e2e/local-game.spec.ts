@@ -112,6 +112,36 @@ test.describe('Local game — chess moves', () => {
     await game.expectMoveInList('e4')
   })
 
+  test('selected pieces show legal move and capture tips', async ({ page }) => {
+    const board = await startLocalGame(page)
+
+    await board.clickSquare('e2')
+    await expect(page.getByRole('button', { name: 'Square e3, legal move' })).toBeVisible()
+    await expect(page.getByRole('button', { name: 'Square e4, legal move' })).toBeVisible()
+
+    await board.clickSquare('e4')
+    await expect(page.getByText('e4', { exact: true })).toBeVisible()
+    await board.makeMove('d7', 'd5')
+    await expect(page.getByText('d5', { exact: true })).toBeVisible()
+    await board.clickSquare('e4')
+    await expect(page.getByRole('button', { name: 'Square d5, legal capture' })).toBeVisible()
+  })
+
+  test("Scholar's Mate ends the game by checkmate", async ({ page }) => {
+    const board = await startLocalGame(page)
+
+    await board.makeMove('e2', 'e4')
+    await board.makeMove('e7', 'e5')
+    await board.makeMove('d1', 'h5')
+    await board.makeMove('b8', 'c6')
+    await board.makeMove('f1', 'c4')
+    await board.makeMove('g8', 'f6')
+    await board.makeMove('h5', 'f7')
+
+    await expect(page.getByRole('heading', { name: 'White Wins' })).toBeVisible()
+    await expect(page.getByText('by Checkmate', { exact: true })).toBeVisible()
+  })
+
   test('second move (d2→d4) is also recorded', async ({ page }) => {
     const board = await startLocalGame(page)
     const game = new GamePage(page)

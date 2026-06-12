@@ -7,6 +7,7 @@ interface SquareHighlightProps {
   flipped: boolean
   selectedSquare: Square | null
   legalSquares: Square[]
+  captureSquares: Square[]
   lastMove: { from: Square; to: Square } | null
   checkSquare: Square | null
 }
@@ -26,6 +27,7 @@ export default function SquareHighlight({
   flipped,
   selectedSquare,
   legalSquares,
+  captureSquares,
   lastMove,
   checkSquare,
 }: SquareHighlightProps) {
@@ -51,13 +53,27 @@ export default function SquareHighlight({
       {highlights.map(({ sq, type }, i) => {
         const { left, top, sqSize } = squarePosition(sq, size, flipped)
         if (type === 'legal') {
+          const isCapture = captureSquares.includes(sq)
           return (
             <div
               key={`${sq}-${type}-${i}`}
-              className="absolute flex items-center justify-center"
+              className="absolute z-10 flex items-center justify-center"
               style={{ left, top, width: sqSize, height: sqSize }}
             >
-              <div className="w-3 h-3 rounded-full bg-highlight-legal" />
+              {isCapture ? (
+                <div
+                  className="rounded-full border-[3px] border-red-500/90 bg-red-500/10 shadow-[0_0_0_2px_rgba(201,154,46,0.85),0_0_12px_rgba(239,68,68,0.8)]"
+                  style={{ width: sqSize * 0.78, height: sqSize * 0.78 }}
+                />
+              ) : (
+                <div
+                  className="rounded-full border-2 border-yellow-100/90 bg-mando-gold/90 shadow-[0_0_10px_rgba(201,154,46,0.95)]"
+                  style={{
+                    width: Math.max(14, sqSize * 0.24),
+                    height: Math.max(14, sqSize * 0.24),
+                  }}
+                />
+              )}
             </div>
           )
         }
